@@ -1,0 +1,44 @@
+Users {
+	id bigint increments
+	email varchar unique
+	password_hash varchar
+}
+
+Rooms {
+	id bigint increments
+	name varchar
+	area int
+	robot_id bigint > Devices.id
+}
+
+Schedules {
+	id bigint increments unique
+	day_of_week enum
+	start_time datetime
+	end_time datetime
+	room_id bigint > Rooms.id
+	robot_id bigint > Devices.id
+}
+
+Devices {
+	id bigint increments unique
+	robot_serial_number varchar unique
+	robot_model varchar
+	filter_counter int
+	brush_counter int
+	sensor_dirt_level int
+	last_cleaning_mode enum
+	battery_level int
+	user_id bigint > Users.id
+}
+
+Cleaning_Logs {
+	id bigint
+	device_id bigint > Devices.id
+	start_time datetime
+	end_time datetime
+	cleaned_area int
+	room_id bigint > Rooms.id
+	cleaning_mode enum
+	cleaning_type enum
+}

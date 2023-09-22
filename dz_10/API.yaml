@@ -1,0 +1,311 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Robot Vacuum Service API
+paths:
+  /users/register:
+    post:
+      summary: Register a new user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: User data for registration
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: User registered successfully
+  /users/login:
+    post:
+      summary: User login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credentials
+          description: User login credentials
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      responses:
+        200:
+          description: User logged in successfully
+  /devices:
+    post:
+      summary: Connect a new robot device
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: device
+          description: Robot device data for connection
+          required: true
+          schema:
+            $ref: "#/definitions/Device"
+      responses:
+        200:
+          description: Robot device connected successfully
+  /rooms:
+    get:
+      summary: Get all rooms
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+    post:
+      summary: Add a new room
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: room
+          description: Room data to add
+          required: true
+          schema:
+            $ref: "#/definitions/Room"
+      responses:
+        200:
+          description: Room added successfully
+  /rooms/{roomId}:
+    delete:
+      summary: Delete a room
+      parameters:
+        - in: path
+          name: roomId
+          description: ID of the room to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Room deleted successfully
+    put:
+      summary: Update a room
+      parameters:
+        - in: path
+          name: roomId
+          description: ID of the room to update
+          required: true
+          type: integer
+        - in: body
+          name: room
+          description: Room data to update
+          required: true
+          schema:
+            $ref: "#/definitions/Room"
+      responses:
+        200:
+          description: Room updated successfully
+  /schedules:
+    get:
+      summary: Get all schedule tasks
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+    post:
+      summary: Add a new schedule task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: schedule
+          description: Schedule task data to add
+          required: true
+          schema:
+            $ref: "#/definitions/Schedule"
+      responses:
+        200:
+          description: Schedule task added successfully
+  /schedules/{scheduleId}:
+    delete:
+      summary: Delete a schedule task
+      parameters:
+        - in: path
+          name: scheduleId
+          description: ID of the schedule task to delete
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Schedule task deleted successfully
+    put:
+      summary: Update a schedule task
+      parameters:
+        - in: path
+          name: scheduleId
+          description: ID of the schedule task to update
+          required: true
+          type: integer
+        - in: body
+          name: schedule
+          description: Schedule task data to update
+          required: true
+          schema:
+            $ref: "#/definitions/Schedule"
+      responses:
+        200:
+          description: Schedule task updated successfully
+  /devices/counters:
+    get:
+      summary: Get sensor, brush, and filter counters
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+  /cleaning/logs:
+    get:
+      summary: Get cleaning logs history
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+  /cleaning/start:
+    post:
+      summary: Start cleaning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: cleaning
+          description: Cleaning data to start
+          required: true
+          schema:
+            $ref: "#/definitions/Cleaning"
+      responses:
+        200:
+          description: Cleaning started successfully
+  /cleaning/pause:
+    post:
+      summary: Pause cleaning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Cleaning paused successfully
+  /cleaning/resume:
+    post:
+      summary: Resume cleaning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Cleaning resumed successfully
+  /cleaning/return:
+    post:
+      summary: Return to docking station
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Robot returned to docking station successfully
+  /cleaning/mode:
+    put:
+      summary: Set cleaning mode
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: mode
+          description: Cleaning mode data to set
+          required: true
+          schema:
+            $ref: "#/definitions/CleaningMode"
+      responses:
+        200:
+          description: Cleaning mode set successfully
+  /devices/status:
+    get:
+      summary: Get robot vacuum status
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+definitions:
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  LoginCredentials:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Device:
+    type: object
+    properties:
+      robotSerialNumber:
+        type: string
+      robotModel:
+        type: string
+      userId:
+        type: integer
+  Room:
+    type: object
+    properties:
+      name:
+        type: string
+      area:
+        type: integer
+      robotId:
+        type: integer
+  Schedule:
+    type: object
+    properties:
+      dayOfWeek:
+        type: string
+      startTime:
+        type: string
+        format: date-time
+      endTime:
+        type: string
+        format: date-time
+      roomId:
+        type: integer
+      robotId:
+        type: integer
+  Cleaning:
+    type: object
+    properties:
+      deviceId:
+        type: integer
+      startTime:
+        type: string
+        format: date-time
+  CleaningMode:
+    type: object
+    properties:
+      mode:
+        type: string
