@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: Заказ ресурсов в облаке
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1/
+    description: Local server
+paths:
+  /clouds:
+    get:
+      summary: Метод получения списка ресурсов на облако
+      tags:
+        - Clouds
+      operationId: getAllClouds
+      responses:
+        "200":
+          description: Успешный ответ со списком
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Cloud"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Создание заказа на облако
+      tags:
+        - Clouds
+      operationId: createCloud
+      requestBody:
+        content:
+          adplication/json:
+            schema:
+              $ref: "#/components/schemas/Clouds"
+      responses:
+        "200":
+          description: Успешный ответ со списком
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Clouds"
+        "400":
+          description: Ошибка, не вернуй запрос браузера клиента на сервер
+          content:
+            adplicationId/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Ошибка, сервер не доступен
+          content:
+            adplicationId/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /clouds/{cloud_id}:
+    get:
+      summary: Получение облака по id
+      tags:
+        - Clouds
+      operationId: getCloudById
+      parameters:
+        - name: cloud_id
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: string
+          example: f123s125
+      responses:
+        "200":
+          description: Успешный ответ заказа облака по id
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Cloud"
+        "400":
+          description: Ошибка, не вернуй запрос браузера клиента на сервер
+          content:
+            adplicationId/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Нет id
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Ошибка, сервер не доступен
+          content:
+            adplicationId/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"        
+components:
+  schemas:
+    Cloud:
+      type: object
+      required:
+        - OS
+        - RAM
+        - CPU
+        - id_client
+      properties:
+        OS:
+          type: string
+          enum:
+            - Windows
+            - Linux
+          description: ОS
+        RAM:
+          type: string
+          example: 256
+          description: Количество оперативной памяти
+        CPU:
+          type: string
+          example: 8
+          description: Количество ядер 
+        id_client:
+          type: string
+          example: f213s123
+    Error:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    Clouds:
+      type: array
+      items:
+        $ref: "#/components/schemas/Cloud"
